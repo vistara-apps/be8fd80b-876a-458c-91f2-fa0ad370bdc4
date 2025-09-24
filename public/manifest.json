@@ -1,0 +1,14 @@
+{
+  "name": "PlantPal",
+  "description": "PlantPal is a Base Mini App built with Zara.",
+  "image": "https://dummyimage.com/1200x628/0a0b0d/ffffff.png&text=OG",
+  "external_url": "https://be8fd80b-876a-458c-91f2-fa0ad370bdc4.vercel.app",
+  "properties": {
+    "app": {
+      "name": "PlantPal",
+      "description": "PlantPal is a Base Mini App built with Zara.",
+      "url": "https://be8fd80b-876a-458c-91f2-fa0ad370bdc4.vercel.app",
+      "icon": "https://0co.to/images/zara-2.png"
+    }
+  }
+}
