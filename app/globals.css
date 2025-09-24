@@ -1,0 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* PlantPal Theme - Warm Social with Plant Focus */
+  --color-bg: #0f2027;
+  --color-fg: #ffffff;
+  --color-accent: #ff6b6b;
+  --color-primary: #4ecdc4;
+  --color-surface: #1a3a42;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #a0b4b7;
+  
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-sm: 4px;
+  
+  --spacing-lg: 24px;
+  --spacing-md: 16px;
+  --spacing-sm: 8px;
+  
+  --shadow-card: 0 4px 12px rgba(15, 32, 39, 0.3);
+}
+
+/* Theme variants */
+[data-theme="celo"] {
+  --color-bg: #000000;
+  --color-fg: #ffffff;
+  --color-accent: #fbcc5c;
+  --color-primary: #fbcc5c;
+  --color-surface: #1a1a1a;
+  --radius-lg: 4px;
+  --radius-md: 2px;
+  --radius-sm: 1px;
+}
+
+[data-theme="solana"] {
+  --color-bg: #1a0d2e;
+  --color-fg: #ffffff;
+  --color-accent: #9945ff;
+  --color-primary: #14f195;
+  --color-surface: #2d1b4e;
+  --radius-lg: 8px;
+  --radius-md: 6px;
+  --radius-sm: 3px;
+}
+
+[data-theme="base"] {
+  --color-bg: #0052ff;
+  --color-fg: #ffffff;
+  --color-accent: #0052ff;
+  --color-primary: #0052ff;
+  --color-surface: #1a4fff;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-sm: 4px;
+}
+
+[data-theme="coinbase"] {
+  --color-bg: #0a0b0d;
+  --color-fg: #ffffff;
+  --color-accent: #0052ff;
+  --color-primary: #0052ff;
+  --color-surface: #1a1b23;
+  --radius-lg: 8px;
+  --radius-md: 6px;
+  --radius-sm: 3px;
+}
+
+@layer base {
+  * {
+    @apply border-gray-200;
+  }
+  
+  body {
+    @apply bg-bg text-fg font-sans antialiased;
+    background: linear-gradient(135deg, var(--color-bg) 0%, #203a43 100%);
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-surface bg-opacity-80 backdrop-blur-sm border border-white border-opacity-10;
+    box-shadow: var(--shadow-card);
+  }
+  
+  .btn-primary {
+    @apply bg-primary text-white px-6 py-3 font-medium hover:bg-opacity-90 transition-all duration-200 shadow-lg hover:shadow-xl;
+    border-radius: var(--radius-md);
+  }
+  
+  .btn-secondary {
+    @apply bg-accent text-white px-6 py-3 font-medium hover:bg-opacity-90 transition-all duration-200 shadow-lg hover:shadow-xl;
+    border-radius: var(--radius-md);
+  }
+  
+  .plant-card {
+    @apply glass-card p-6 hover:bg-opacity-90 transition-all duration-200 transform hover:scale-105;
+    border-radius: var(--radius-lg);
+  }
+  
+  .care-button {
+    @apply btn-primary flex items-center gap-2 w-full justify-center;
+  }
+  
+  .personality-option {
+    @apply glass-card p-4 cursor-pointer hover:bg-accent hover:bg-opacity-20 transition-all duration-200;
+    border-radius: var(--radius-md);
+  }
+}
