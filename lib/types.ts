@@ -35,6 +35,7 @@ export interface CareSchedule {
 export interface PlantPreference {
   plantType: string;
   careLevel: 'low' | 'medium' | 'high';
+  personality?: PersonalityType;
 }
 
 export type PersonalityType = 
