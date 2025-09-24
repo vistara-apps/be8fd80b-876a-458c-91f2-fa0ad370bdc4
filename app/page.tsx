@@ -12,38 +12,6 @@ import { PLANT_DATABASE } from '@/lib/constants';
 import { Plus, Search, Bell } from 'lucide-react';
 import { useAccount } from 'wagmi';
 
-// Mock data for demonstration
-const mockPlants: Plant[] = [
-  {
-    plantId: '1',
-    userId: 'user1',
-    plantName: 'Monstera Mike',
-    plantType: 'monstera',
-    careSchedule: {
-      wateringFrequency: 7,
-      fertilizingFrequency: 30,
-      repottingFrequency: 12
-    },
-    lastWatered: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000), // 8 days ago
-    lastFertilized: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000), // 25 days ago
-    personality: 'cheery-gardener'
-  },
-  {
-    plantId: '2',
-    userId: 'user1',
-    plantName: 'Snake Sally',
-    plantType: 'snake-plant',
-    careSchedule: {
-      wateringFrequency: 14,
-      fertilizingFrequency: 60,
-      repottingFrequency: 24
-    },
-    lastWatered: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000), // 10 days ago
-    lastFertilized: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000), // 45 days ago
-    personality: 'humorous-friend'
-  }
-];
-
 export default function HomePage() {
   const { address, isConnected } = useAccount();
   const [plants, setPlants] = useState<Plant[]>([]);
@@ -53,26 +21,49 @@ export default function HomePage() {
   const [reminders, setReminders] = useState<ReminderMessage[]>([]);
 
   useEffect(() => {
-    if (isConnected) {
-      // Load user's plants (mock data for now)
-      setPlants(mockPlants);
-      
-      // Generate reminders for plants that need care
-      const newReminders: ReminderMessage[] = [];
-      mockPlants.forEach(plant => {
-        if (plant.lastWatered && isCareDue(plant.lastWatered, plant.careSchedule.wateringFrequency)) {
-          newReminders.push({
-            plantName: plant.plantName,
-            actionType: 'watering',
-            personality: plant.personality,
-            message: generateReminderMessage(plant.plantName, 'watering', plant.personality),
-            timestamp: new Date()
-          });
-        }
-      });
-      setReminders(newReminders);
+    if (isConnected && address) {
+      // Load user's plants from API
+      fetch(`/api/plants?address=${address}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.plants) {
+            setPlants(data.plants);
+
+            // Generate reminders for plants that need care
+            const newReminders: ReminderMessage[] = [];
+            data.plants.forEach((plant: Plant) => {
+              if (plant.lastWatered && isCareDue(plant.lastWatered, plant.careSchedule.wateringFrequency)) {
+                newReminders.push({
+                  plantName: plant.plantName,
+                  actionType: 'watering',
+                  personality: plant.personality,
+                  message: generateReminderMessage(plant.plantName, 'watering', plant.personality),
+                  timestamp: new Date()
+                });
+              }
+              if (plant.lastFertilized && isCareDue(plant.lastFertilized, plant.careSchedule.fertilizingFrequency)) {
+                newReminders.push({
+                  plantName: plant.plantName,
+                  actionType: 'fertilizing',
+                  personality: plant.personality,
+                  message: generateReminderMessage(plant.plantName, 'fertilizing', plant.personality),
+                  timestamp: new Date()
+                });
+              }
+            });
+            setReminders(newReminders);
+          }
+        })
+        .catch(error => {
+          console.error('Failed to load plants:', error);
+          setPlants([]);
+          setReminders([]);
+        });
+    } else {
+      setPlants([]);
+      setReminders([]);
     }
-  }, [isConnected]);
+  }, [isConnected, address]);
 
   const handleAddPlant = () => {
     setShowAddPlant(true);
